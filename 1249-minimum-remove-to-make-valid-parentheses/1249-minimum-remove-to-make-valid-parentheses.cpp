@@ -1,46 +1,35 @@
 class Solution {
 public:
     string minRemoveToMakeValid(string s) {
-        // stack to store '('
+        // stack to store location of '('
+        // idea is to put * in place of invalid '(' , ')'
         stack<int> stack;
-        string temp="";
         for(int i=0;i<s.size();i++)
         {
-            // take a new string
-            // add charater to this string if cahr is aphabet 
-            // if cahrat(i) == '(' push it in stack 
-            // if cahrat(i) is ')' 
-           
+            // if character at(i) == '(' push back the location i
             if(s[i]=='('){
-                temp+=s[i];
                 stack.push(i);
             }
             else if(s[i]==')')
             {
-                // if stack is empty don't add ')'
+                // if stack is empty and found')' this mean we have to remove ')' mark it as * 
                 if(stack.empty())
                     s[i]='*';      
                 // pop if stack is not empty
-                else{
-                    temp+=s[i];
-                    stack.pop();}
-            }
-            else
-            {
-                temp+=s[i];
+                else
+                    stack.pop();
             }
                 
         }
         while(!stack.empty())
         {
+            // mark * at all the location in left in the stack
             int i=stack.top();
             s[i]='*';
             stack.pop();
         }
-     
+        //remove all the occurances of *
         s.erase(remove(s.begin(),s.end(),'*'),s.end());
-      
-  
         return s;
         
     }
