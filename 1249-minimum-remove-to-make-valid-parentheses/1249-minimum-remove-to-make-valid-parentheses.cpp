@@ -2,30 +2,28 @@ class Solution {
 public:
     string minRemoveToMakeValid(string s) {
         // stack to store '('
-        stack<char> stack;
+        stack<int> stack;
         string temp="";
         for(int i=0;i<s.size();i++)
         {
             // take a new string
-           
             // add charater to this string if cahr is aphabet 
             // if cahrat(i) == '(' push it in stack 
             // if cahrat(i) is ')' 
            
             if(s[i]=='('){
                 temp+=s[i];
-                stack.push('(');
+                stack.push(i);
             }
             else if(s[i]==')')
             {
                 // if stack is empty don't add ')'
                 if(stack.empty())
-                    continue;      
+                    s[i]='*';      
                 // pop if stack is not empty
                 else{
                     temp+=s[i];
-                    stack.pop();
-                }
+                    stack.pop();}
             }
             else
             {
@@ -33,28 +31,17 @@ public:
             }
                 
         }
-        string ans ="";
-     
-        for(int i = temp.size()-1;i>=0;i--)
+        while(!stack.empty())
         {
-            
-                if(temp[i]!= '(' || stack.empty() )
-                {
-                    cout<<"true";
-                    ans+=temp[i];
-                }
-                else
-                {
-                    cout<<"false";
-                    stack.pop();
-                }
+            int i=stack.top();
+            s[i]='*';
+            stack.pop();
         }
-            
-            
+     
+        s.erase(remove(s.begin(),s.end(),'*'),s.end());
       
-        reverse(ans.begin(),ans.end());
-       cout<<ans;
-        return ans;
+  
+        return s;
         
     }
 };
