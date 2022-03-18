@@ -1,45 +1,53 @@
 class Solution {
 public:
     string removeDuplicateLetters(string s) {
+        //stack for storing character
         stack<char>st;
-        vector<bool> hash(27,false);
-        
-        
+        //visited - for checking element visited or not
+        vector<bool> visited(27,false);
+        // count for storing frequency of all elements
         vector<int>count(27);
         
+        //calcuate & store frequency of all the elements
         for(int i=0 ;i<s.size();i++)
-        {
             count[s[i]-'a']++;
-            //cout<<count[s[i]-'a'];
-            //cout<<hash[i];
-        }
         
+        //traverse the string
         for(int i=0 ;i<s.size();i++)
         {
+            
             int index =  s[i]-'a';
-            if(st.empty() && (hash[index]==false) )
+            // if stack is empty and s[i] element is not visited
+            // push s[i] element in the stack and decrease its frequency and mark it as visited
+            if(st.empty() && (visited[index]==false) )
             {
                 st.push(s[i]);
                 count[index]--;
-                hash[index]=true;
-                //cout<<count[index];
-                //cout<<hash[index];
+                visited[index]=true;
             }
-            else if (hash[index]==false){
+            else if (visited[index]==false){
+                //if s[i] elememt is not visited and smaller than element present at the top of stack
+                //pop the element from stack and change not visited in place of visited until 
+                // 1- stack is empty
+                // 2- frequency of top element in the stack is >0
+                // 3- find a element smaller than s[i] 
                 if(s[i] < st.top())
                 {
+                    
                      while(!st.empty()&&count[st.top() - 'a'] > 0 && s[i]< st.top()){
-                        hash[st.top()-'a'] = false;
+                        visited[st.top()-'a'] = false;
                         st.pop();
                         
                     }
                      
                 }
+                //push s[i] in the stack and decreases its frequency and mark as visited
                  st.push(s[i]);
-                    hash[index] = true;
+                    visited[index] = true;
                     count[index]--;
             }
-            else if(hash[index]==true){
+            // if s[i] is already visited decrease its frequency 
+            else {
                 count[index]--;
             }
         }
@@ -47,9 +55,8 @@ public:
         while(!st.empty()){
             ans+=st.top();
             st.pop();
-            
         }
-        cout<<ans;
+        
         reverse(ans.begin(),ans.end());
         return ans;
         
